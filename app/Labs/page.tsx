@@ -3,6 +3,7 @@ export default function Labs() {
  return (
    <div id="wd-labs">
      <h1>Labs</h1>
+     <h2>Matthew Tong</h2>
      <ul>
        <li>
          <Link href="/Labs/Lab1" id="wd-lab1-link">
@@ -20,6 +21,14 @@ export default function Labs() {
          <Link href="/" id="wd-lab3-link">
            Kambaz </Link>
        </li>
-     </ul>
+       </ul>
+       <li id="wd-github">
+        GitHub Repository: 
+        <a href="https://github.com/moofew/kambaz-next-js" 
+        target="_blank" 
+        rel="noopener noreferrer">
+        https://github.com/moofew/kambaz-next-js
+      </a>
+    </li>
    </div>
 );}
