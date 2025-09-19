@@ -8,7 +8,7 @@ export default function Dashboard() {
       <div id="wd-dashboard-courses">
         <div className="wd-dashboard-course">
           <Link href="/Courses/1234" className="wd-dashboard-course-link">
-            <Image src="/images/reactjs.jpg" width={200} height={150} />
+            <Image src="/images/reactjs.jpg" width={200} height={150} alt="React JS"/>
             <div>
               <h5> CS1234 React JS </h5>
               <p className="wd-dashboard-course-title">
@@ -21,7 +21,7 @@ export default function Dashboard() {
 
         <div className="wd-dashboard-course"> 
             <Link href="/Courses/1" className="wd-dashboard-course-link">
-            <Image src="/images/black.jpg" width={200} height={150} />
+            <Image src="/images/black.jpg" width={200} height={150} alt="Java"/>
             <div>
               <h5> CS1 Intro to Java </h5>
               <p className="wd-dashboard-course-title">
@@ -34,7 +34,7 @@ export default function Dashboard() {
 
         <div className="wd-dashboard-course"> 
                         <Link href="/Courses/2" className="wd-dashboard-course-link">
-            <Image src="/images/blue.png" width={200} height={150} />
+            <Image src="/images/blue.png" width={200} height={150} alt="Python"/>
             <div>
               <h5> CS2 Intro to Python </h5>
               <p className="wd-dashboard-course-title">
@@ -47,7 +47,7 @@ export default function Dashboard() {
 
         <div className="wd-dashboard-course"> 
                         <Link href="/Courses/3" className="wd-dashboard-course-link">
-            <Image src="/images/green.png" width={200} height={150} />
+            <Image src="/images/green.png" width={200} height={150} alt="HTML/CSS"/>
             <div>
               <h5> CS3 HTML/CSS </h5>
               <p className="wd-dashboard-course-title">
@@ -60,7 +60,7 @@ export default function Dashboard() {
 
         <div className="wd-dashboard-course"> 
                         <Link href="/Courses/4" className="wd-dashboard-course-link">
-            <Image src="/images/orange.png" width={200} height={150} />
+            <Image src="/images/orange.png" width={200} height={150} alt="Kotlin"/>
             <div>
               <h5> CS4 Kotlin </h5>
               <p className="wd-dashboard-course-title">
@@ -73,7 +73,7 @@ export default function Dashboard() {
 
         <div className="wd-dashboard-course"> 
                         <Link href="/Courses/5" className="wd-dashboard-course-link">
-            <Image src="/images/purple.png" width={200} height={150} />
+            <Image src="/images/purple.png" width={200} height={150} alt="MERN Stack"/>
             <div>
               <h5> CS5 MERN Stack </h5>
               <p className="wd-dashboard-course-title">
@@ -86,7 +86,7 @@ export default function Dashboard() {
 
         <div className="wd-dashboard-course"> 
                         <Link href="/Courses/6" className="wd-dashboard-course-link">
-            <Image src="/images/red.png" width={200} height={150} />
+            <Image src="/images/red.png" width={200} height={150} alt="C++"/>
             <div>
               <h5> CS6 C++ </h5>
               <p className="wd-dashboard-course-title">
@@ -99,7 +99,7 @@ export default function Dashboard() {
 
         <div className="wd-dashboard-course"> 
                         <Link href="/Courses/7" className="wd-dashboard-course-link">
-            <Image src="/images/yellow.jpg" width={200} height={150} />
+            <Image src="/images/yellow.jpg" width={200} height={150} alt="OCaml"/>
             <div>
               <h5> CS7 OCaml </h5>
               <p className="wd-dashboard-course-title">

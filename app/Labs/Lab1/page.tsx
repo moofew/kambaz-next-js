@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 
 export default function Lab1() {
     return (
@@ -50,7 +51,7 @@ export default function Lab1() {
                 <ul id="wd-my-books">
                     <li>Dune</li>
                     <li>Lord of the Rings</li>
-                    <li>Ender's Game</li>
+                    <li>Ender&apos;s Game</li>
                     <li>Red Mars</li>
                     <li>The Forever War</li>
                 </ul>
@@ -146,12 +147,13 @@ export default function Lab1() {
             <div id="wd-images">
                 <h4>Image tag</h4>
                 Loading an image from the internet: <br />
-                <img id="wd-starship" width="400px"   
-            src="https://www.staradvertiser.com/wp-content/uploads/2021/08/web1_Starship-gap2.jpg" />
+                <Image id="wd-starship" width={400} height={300}
+            src="https://www.staradvertiser.com/wp-content/uploads/2021/08/web1_Starship-gap2.jpg" 
+            alt="Starship"/>
                 <br />
                 Loading a local image:
                 <br />
-                <img id="wd-teslabot" src="/images/teslabot.jpg" height="200px" />
+                <Image id="wd-teslabot" src="/images/teslabot.jpg" width={300} height={200} alt="Tesla Bot" />
             </div>
             <div id="wd-forms">
                 <h4>Form Elements</h4>
