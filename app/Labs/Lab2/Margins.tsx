@@ -15,5 +15,5 @@ export default function Margins() {
                         wd-border-yellow wd-border-solid wd-bg-color-blue wd-fg-color-white">
                 Margin all around </div>
             </div>
-    )
+    );
 }

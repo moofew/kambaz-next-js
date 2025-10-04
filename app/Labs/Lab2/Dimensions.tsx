@@ -14,5 +14,5 @@ export default function Dimensions(){
                 Square</div>
             </div>
             </div>
-    )
+    );
 }

@@ -12,5 +12,5 @@ export default function Zindex(){
                 Square </div>
             </div><br /><br /><br /><br /><br /><br /><br />
         </div>
-    )
+    );
 }

@@ -15,5 +15,5 @@ export default function Corners() {
                 wd-border-thin wd-border-blue wd-border-solid wd-padding-fat">
                 Different rounded corners </p>
             </div>
-    )
+    );
 }
