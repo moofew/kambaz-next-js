@@ -1,17 +1,23 @@
+"use client";
+
+import { useParams } from "next/navigation";
+import * as db from "../../../../Database";
+import Link from "next/link";
+
 export default function AssignmentEditor() {
+  const { cid, aid } = useParams() as { cid: string; aid: string };
+  const assignment: any =
+    (db as any).assignments?.find((a: any) => a._id === aid && a.course === cid) || {};
+
   return (
     <div id="wd-assignments-editor" className="p-3">
       <div className="mb-3">
-        <label htmlFor="wd-name" className="form-label">
-          <b>Assignment Name</b>
-        </label>
-        <input id="wd-name" defaultValue="A1 - ENV + HTML" className="form-control" />
+        <label htmlFor="wd-name" className="form-label"><b>Assignment Name</b></label>
+        <input id="wd-name" defaultValue={assignment.title ?? ""} className="form-control" />
       </div>
 
       <div className="mb-4">
-        <label htmlFor="wd-description" className="form-label">
-          Description
-        </label>
+        <label htmlFor="wd-description" className="form-label">Description</label>
         <textarea
           id="wd-description"
           className="form-control"
@@ -34,12 +40,12 @@ The Kanbas application should include a link to navigate back to the landing pag
 
       <div className="mb-3">
         <label htmlFor="wd-points" className="form-label">Points</label>
-        <input id="wd-points" defaultValue={100} className="form-control" />
+        <input id="wd-points" defaultValue={assignment.points ?? 100} className="form-control" />
       </div>
 
       <div className="mb-3">
         <label htmlFor="wd-group" className="form-label">Assignment Group</label>
-        <select id="wd-group" defaultValue="ASSIGNMENTS" className="form-select">
+        <select id="wd-group" defaultValue={assignment.group ?? "ASSIGNMENTS"} className="form-select">
           <option value="ASSIGNMENTS">ASSIGNMENTS</option>
           <option value="QUIZZES">QUIZZES</option>
           <option value="EXAMS">EXAMS</option>
@@ -49,7 +55,7 @@ The Kanbas application should include a link to navigate back to the landing pag
 
       <div className="mb-3">
         <label htmlFor="wd-display-grade-as" className="form-label">Display Grade as</label>
-        <select id="wd-display-grade-as" defaultValue="PERCENTAGE" className="form-select">
+        <select id="wd-display-grade-as" defaultValue={assignment.displayAs ?? "PERCENTAGE"} className="form-select">
           <option value="PERCENTAGE">Percentage</option>
           <option value="LETTER">Letter</option>
           <option value="POINTS">Points</option>
@@ -58,7 +64,7 @@ The Kanbas application should include a link to navigate back to the landing pag
 
       <div className="mb-4">
         <label htmlFor="wd-submission-type" className="form-label">Submission Type</label>
-        <select id="wd-submission-type" defaultValue="Online" className="form-select mb-3">
+        <select id="wd-submission-type" defaultValue={assignment.submissionType ?? "Online"} className="form-select mb-3">
           <option value="Online">Online</option>
           <option value="In-Person">In-Person</option>
         </select>
@@ -96,7 +102,12 @@ The Kanbas application should include a link to navigate back to the landing pag
 
         <div className="mb-3">
           <label htmlFor="wd-due-date" className="form-label">Due</label>
-          <input id="wd-due-date" type="date" defaultValue="2024-05-13" className="form-control" />
+          <input
+            id="wd-due-date"
+            type="date"
+            defaultValue={assignment.due ?? ""}
+            className="form-control"
+          />
         </div>
 
         <div className="mb-3">
@@ -104,7 +115,7 @@ The Kanbas application should include a link to navigate back to the landing pag
           <input
             id="wd-available-from"
             type="date"
-            defaultValue="2024-05-06"
+            defaultValue={assignment.available ?? ""}
             className="form-control"
           />
         </div>
@@ -114,7 +125,7 @@ The Kanbas application should include a link to navigate back to the landing pag
           <input
             id="wd-available-until"
             type="date"
-            defaultValue="2024-05-20"
+            defaultValue={assignment.availableUntil ?? ""}
             className="form-control"
           />
         </div>
@@ -123,8 +134,8 @@ The Kanbas application should include a link to navigate back to the landing pag
       <hr />
 
       <div className="text-end">
-        <button className="btn btn-secondary me-2">Cancel</button>
-        <button className="btn btn-danger">Save</button>
+        <Link href={`/Courses/${cid}/Assignments`} className="btn btn-secondary me-2">Cancel</Link>
+        <Link href={`/Courses/${cid}/Assignments`} className="btn btn-danger">Save</Link>
       </div>
     </div>
   );

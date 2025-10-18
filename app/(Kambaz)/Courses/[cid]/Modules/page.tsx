@@ -1,12 +1,17 @@
-import ListGroup from "react-bootstrap/ListGroup";
-import ListGroupItem from "react-bootstrap/ListGroupItem";
-import { BsGripVertical } from "react-icons/bs";
+"use client"
+import { useParams } from "next/navigation";
+import * as db from "../../../Database";
 import { Button } from "react-bootstrap";
+import { ListGroupItem } from "react-bootstrap";
+import { ListGroup } from "react-bootstrap";
+import { BsGripVertical } from "react-icons/bs";
 import { FaPlus } from "react-icons/fa6";
 import ModuleControlButtons from "./ModuleControlButtons";
 import LessonControlButtons from "./LessonControlButtons";
 
 export default function Modules() {
+  const { cid } = useParams();
+  const modules = db.modules;
   return (
     <div>
       <div className="d-flex justify-content-end align-items-center mb-3 gap-2">
@@ -32,23 +37,24 @@ export default function Modules() {
         
       </div>
 
-      <ListGroup className="rounded-0" id="wd-modules">
-        <ListGroupItem className="wd-module p-0 mb-5 fs-5 border-gray">
-          <div className="wd-title p-3 ps-2 bg-secondary">
-            <BsGripVertical className="me-2 fs-3" /> Week 1 <ModuleControlButtons />
-          </div>
-          <ListGroup className="wd-lessons rounded-0">
-            <ListGroupItem className="wd-lesson p-3 ps-1">
-              <BsGripVertical className="me-2 fs-3" /> LEARNING OBJECTIVES <LessonControlButtons />
-            </ListGroupItem>
-            <ListGroupItem className="wd-lesson p-3 ps-1">
-              <BsGripVertical className="me-2 fs-3" /> Introduction to the course <LessonControlButtons />
-            </ListGroupItem>
-            <ListGroupItem className="wd-lesson p-3 ps-1">
-              <BsGripVertical className="me-2 fs-3" /> Learn what is Web Development <LessonControlButtons />
-            </ListGroupItem>
-          </ListGroup>
-        </ListGroupItem>
+      <ListGroup id="wd-modules" className="rounded-0">
+              {modules
+                .filter((module: any) => module.course === cid)
+                .map((module: any) => (
+                <ListGroupItem key={module._id} className="wd-module p-0 mb-5 fs-5 border-gray">
+                  <div className="wd-title p-3 ps-2 bg-secondary">
+                    <BsGripVertical className="me-2 fs-3" /> {module.name} <ModuleControlButtons />
+                  </div>
+                  {module.lessons && (
+                    <ListGroup className="wd-lessons rounded-0">
+                      {module.lessons.map((lesson: any) => (
+                        <ListGroupItem key={lesson._id} className="wd-lesson p-3 ps-1">
+                          <BsGripVertical className="me-2 fs-3" /> {lesson.name} <LessonControlButtons />
+                        </ListGroupItem>
+                      ))}</ListGroup>
+                  )}
+                </ListGroupItem>
+              ))}
       </ListGroup>
     </div>
   );
