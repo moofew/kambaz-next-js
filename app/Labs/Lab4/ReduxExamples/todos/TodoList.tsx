@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { ListGroup } from "react-bootstrap";
 import TodoForm from "./TodoForm";
