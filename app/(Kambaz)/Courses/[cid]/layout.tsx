@@ -1,24 +1,52 @@
-import { ReactNode } from "react";
+"use client";
+import { ReactNode, useState, useEffect } from "react";
 import CourseNavigation from "./Navigation";
-import { FaAlignJustify } from "react-icons/fa";
-import { courses } from "../../Database";
-import Breadcrumb from "./Breadcrumb";
+import { useSelector } from "react-redux";
+import { useParams, useRouter } from "next/navigation";
+import { FaAlignJustify } from "react-icons/fa6";
 
-export default async function CoursesLayout(
-  { children, params }: Readonly<{ children: ReactNode; params: Promise<{ cid: string }> }>) {
- const { cid } = await params;
- const course = courses.find((course) => course._id === cid);
- return (
-   <div id="wd-courses">
-    <h2 className="text-danger">
-        <FaAlignJustify className="me-4 fs-4 mb-1" />
-        <Breadcrumb course={course}/> </h2> <hr />
-    <div className="d-flex">
-      <div className="d-none d-md-block">
-        <CourseNavigation cid={cid} />
+export default function CoursesLayout({ children }: { children: ReactNode }) {
+  const { cid } = useParams() as { cid: string };
+  const router = useRouter();
+  const { courses } = useSelector((state: any) => state.coursesReducer);
+  const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const course = courses.find((c: any) => c._id === cid);
+  const [showNav, setShowNav] = useState(true);
+
+  const isEnrolled = enrollments.some(
+    (enrollment: any) =>
+      enrollment.user === currentUser?._id && enrollment.course === cid
+  );
+
+  useEffect(() => {
+    if (currentUser && !isEnrolled) {
+      router.push("/Dashboard");
+    }
+  }, [currentUser, isEnrolled, router]);
+
+  if (currentUser && !isEnrolled) {
+    return null;
+  }
+
+  return (
+    <div id="wd-courses">
+      <h2>
+        <FaAlignJustify
+          className="me-4 fs-4 mb-1"
+          onClick={() => setShowNav((s) => !s)}
+        />
+        {course?.name}
+      </h2>
+      <hr />
+      <div className="d-flex">
+        {showNav && (
+          <div>
+            <CourseNavigation cid={""} />
+          </div>
+        )}
+        <div className="flex-fill">{children}</div>
       </div>
-      <div className="flex-fill">
-        {children}
-      </div></div>
-  </div>
-);}
+    </div>
+  );
+}

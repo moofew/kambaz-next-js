@@ -1,82 +1,75 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import { useParams } from "next/navigation";
-import * as db from "../../../Database";
-import Link from "next/link";
-import { BsGripVertical } from "react-icons/bs";
-import { FaCheckCircle } from "react-icons/fa";
-import { IoEllipsisVertical } from "react-icons/io5";
+import { useParams, useRouter } from "next/navigation";
+import { useSelector, useDispatch } from "react-redux";
+import { ListGroup, ListGroupItem, Button } from "react-bootstrap";
+import { FaTrash } from "react-icons/fa";
+import { deleteAssignment } from "./reducer";
 
 export default function Assignments() {
   const { cid } = useParams();
-  const assignments = db.assignments.filter((a: any) => a.course === cid);
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const { assignments } = useSelector((s: any) => s.assignmentsReducer);
+  const { currentUser } = useSelector((s: any) => s.accountReducer);
+  const items = assignments.filter((a: any) => a.course === cid);
+  const isFaculty = currentUser?.role === "FACULTY";
+
+  const handleDelete = (assignmentId: string, assignmentTitle: string) => {
+    const confirmed = window.confirm(
+      `Are you sure you want to remove the assignment "${assignmentTitle}"?`
+    );
+    if (confirmed) {
+      dispatch(deleteAssignment(assignmentId));
+    }
+  };
 
   return (
-    <div id="wd-assignments" className="p-3">
-      <div className="row mb-4">
-        <div className="col">
-          <input
-            placeholder="🔍 Search..."
-            id="wd-search-assignment"
-            className="form-control"
-          />
-        </div>
-        <div className="col text-end">
-          <button id="wd-add-assignment-group" className="btn btn-secondary me-2">
-            + Group
-          </button>
-          <button id="wd-add-assignment" className="btn btn-danger">
-            + Assignment
-          </button>
-        </div>
-      </div>
-
-      <div className="row border">
-        <div className="col fw-bold p-2">
-          <div className="row">
-            <div className="col">
-              <BsGripVertical className="me-2 fs-3" />
-              ASSIGNMENTS
-              <span> (40% of Total)</span>
-            </div>
-            <div className="col text-end">
-              <button className="btn btn-light btn-sm border me-2">+</button>
-              <IoEllipsisVertical className="fs-4" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {assignments.map((a: any, index: number) => (
-        <div
-          key={a._id}
-          className="row p-2"
-          style={{
-            borderLeft: "5px solid green",
-            borderTop: index === 0 ? "1px solid lightgray" : "1px solid transparent",
-            borderRight: "1px solid lightgray",
-            borderBottom: "1px solid lightgray",
-          }}
+    <div id="wd-assignments">
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h2>Assignments</h2>
+        <Button
+          id="wd-add-assignment"
+          variant="danger"
+          onClick={() => router.push(`/Courses/${cid}/Assignments/Editor`)}
         >
-          <div className="col">
-            <BsGripVertical className="me-2 fs-3" />
-            <Link
-              href={`/Courses/${cid}/Assignments/${a._id}`}
-              className="fw-bold text-decoration-none text-dark"
+          + Assignment
+        </Button>
+      </div>
+      <ListGroup>
+        {items.map((a: any) => (
+          <ListGroupItem key={a._id} className="d-flex justify-content-between align-items-center">
+            <div
+              style={{ cursor: 'pointer', flex: 1 }}
+              onClick={() => router.push(`/Courses/${cid}/Assignments/Editor?id=${a._id}`)}
             >
-              {a.title}
-            </Link>
-            <div className="small">
-              Multiple Modules | <b>Not available until</b> {a.available} | <b>Due</b>{" "}
-              {a.due} | {a.points}pts
+              <div className="fw-semibold">{a.title}</div>
+              <div className="text-muted small">Due {a.due} | {a.points} pts</div>
             </div>
-          </div>
-          <div className="col text-end">
-            <FaCheckCircle className="text-success me-2" />
-            <IoEllipsisVertical className="fs-4" />
-          </div>
-        </div>
-      ))}
+            <div className="d-flex gap-2">
+              <Button
+                variant="danger"
+                size="sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete(a._id, a.title);
+                }}
+                id="wd-delete-assignment"
+              >
+                <FaTrash />
+              </Button>
+              <Button
+                variant="warning"
+                size="sm"
+                onClick={() => router.push(`/Courses/${cid}/Assignments/Editor?id=${a._id}`)}
+                id="wd-edit-assignment"
+              >
+                Edit
+              </Button>
+            </div>
+          </ListGroupItem>
+        ))}
+        {items.length === 0 && <ListGroupItem>No assignments yet.</ListGroupItem>}
+      </ListGroup>
     </div>
   );
 }
