@@ -34,7 +34,7 @@ export default function Modules() {
 
   const onCreateModuleForCourse = async () => {
     if (!cid) return;
-    const newModule = { name: moduleName, course: cid };
+    const newModule = { name: moduleName, course: cid as string };
     // eslint-disable-next-line @next/next/no-assign-module-variable
     const module = await client.createModuleForCourse(cid as string, newModule);
     dispatch(setModules([...modules, module]));
