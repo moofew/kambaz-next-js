@@ -15,18 +15,19 @@ export default function CoursesLayout({ children }: { children: ReactNode }) {
   const course = courses.find((c: any) => c._id === cid);
   const [showNav, setShowNav] = useState(true);
 
+  const isFaculty = currentUser?.role === "FACULTY";
   const isEnrolled = enrollments.some(
     (enrollment: any) =>
       enrollment.user === currentUser?._id && enrollment.course === cid
   );
 
   useEffect(() => {
-    if (currentUser && !isEnrolled) {
+    if (currentUser && !isFaculty && !isEnrolled) {
       router.push("/Dashboard");
     }
-  }, [currentUser, isEnrolled, router]);
+  }, [currentUser, isFaculty, isEnrolled, router]);
 
-  if (currentUser && !isEnrolled) {
+  if (currentUser && !isFaculty && !isEnrolled) {
     return null;
   }
 
@@ -43,7 +44,7 @@ export default function CoursesLayout({ children }: { children: ReactNode }) {
       <div className="d-flex">
         {showNav && (
           <div>
-            <CourseNavigation cid={""} />
+            <CourseNavigation cid={cid} />
           </div>
         )}
         <div className="flex-fill">{children}</div>

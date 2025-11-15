@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import * as db from "../../../Database";
 import { Button, FormControl } from "react-bootstrap";
@@ -12,16 +12,31 @@ import ModuleControlButtons from "./ModuleControlButtons";
 import LessonControlButtons from "./LessonControlButtons";
 import { v4 as uuidv4 } from "uuid";
 import ModulesControls from "./ModulesControls";
-import { addModule, editModule, updateModule, deleteModule }
+import { setModules, addModule, editModule, updateModule, deleteModule }
   from "./reducer";
 import { useSelector, useDispatch } from "react-redux";
+import * as client from "../../client";
 
 export default function Modules() {
-  const { cid } = useParams();
-  const [setModules] = useState<any[]>(db.modules);
-  const [moduleName, setModuleName] = useState("");
   const { modules } = useSelector((state: any) => state.modulesReducer);
+  const { cid } = useParams();
   const dispatch = useDispatch();
+  const [moduleName, setModuleName] = useState("");
+
+  const fetchModules = async () => {
+    const modules = await client.findModulesForCourse(cid as string);
+    dispatch(setModules(modules));
+  };
+
+  const onUpdateModule = async (module: any) => {
+    await client.updateModule(module);
+    const newModules = modules.map((m: any) => m._id === module._id ? module : m);
+    dispatch(setModules(newModules));
+  };
+
+  useEffect(() => {
+    fetchModules();
+  }, []);
 
   return (
     <div>
@@ -53,21 +68,21 @@ export default function Modules() {
               setModuleName("")
               }} />
               {modules
-                .filter((module: any) => module.course === cid)
                 .map((module: any) => (
                 <ListGroupItem key={module._id} className="wd-module p-0 mb-5 fs-5 border-gray">
                   <div className="wd-title p-3 ps-2 bg-secondary">
-                    <BsGripVertical className="me-2 fs-3" /> {module.name} 
+                    <BsGripVertical className="me-2 fs-3" />
                     {!module.editing && module.name}
                     { module.editing && (
                       <FormControl className="w-50 d-inline-block"
+                            value={module.name}
                             onChange={(e) => dispatch(updateModule({ ...module, name: e.target.value }))}
                             onKeyDown={(e) => {
                               if (e.key === "Enter") {
-                                dispatch(updateModule({ ...module, editing: false }));
+                                onUpdateModule({ ...module, editing: false });
                               }
                             }}
-                            defaultValue={module.name}/>
+                            />
                     )}
                     <ModuleControlButtons
                       moduleId={module._id}

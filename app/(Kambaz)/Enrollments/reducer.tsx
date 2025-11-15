@@ -25,8 +25,11 @@ const enrollmentsSlice = createSlice({
           !(enrollment.user === userId && enrollment.course === courseId)
       ) as any;
     },
+    setEnrollments: (state, { payload: enrollments }) => {
+      state.enrollments = enrollments;
+    },
   },
 });
 
-export const { enrollUser, unenrollUser } = enrollmentsSlice.actions;
+export const { enrollUser, unenrollUser, setEnrollments } = enrollmentsSlice.actions;
 export default enrollmentsSlice.reducer;

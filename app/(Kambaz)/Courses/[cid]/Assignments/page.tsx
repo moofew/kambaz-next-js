@@ -4,7 +4,9 @@ import { useParams, useRouter } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { ListGroup, ListGroupItem, Button } from "react-bootstrap";
 import { FaTrash } from "react-icons/fa";
-import { deleteAssignment } from "./reducer";
+import { useEffect } from "react";
+import { setAssignments } from "./reducer";
+import * as client from "../../client";
 
 export default function Assignments() {
   const { cid } = useParams();
@@ -15,14 +17,24 @@ export default function Assignments() {
   const items = assignments.filter((a: any) => a.course === cid);
   const isFaculty = currentUser?.role === "FACULTY";
 
-  const handleDelete = (assignmentId: string, assignmentTitle: string) => {
+  const fetchAssignments = async () => {
+    const assignments = await client.findAssignmentsForCourse(cid as string);
+    dispatch(setAssignments(assignments));
+  };
+
+  const handleDelete = async (assignmentId: string, assignmentTitle: string) => {
     const confirmed = window.confirm(
       `Are you sure you want to remove the assignment "${assignmentTitle}"?`
     );
     if (confirmed) {
-      dispatch(deleteAssignment(assignmentId));
+      await client.deleteAssignment(assignmentId);
+      dispatch(setAssignments(assignments.filter((a: any) => a._id !== assignmentId)));
     }
   };
+
+  useEffect(() => {
+    fetchAssignments();
+  }, [cid]);
 
   return (
     <div id="wd-assignments">
@@ -31,7 +43,7 @@ export default function Assignments() {
         <Button
           id="wd-add-assignment"
           variant="danger"
-          onClick={() => router.push(`/Courses/${cid}/Assignments/Editor`)}
+          onClick={() => router.push(`/Courses/${cid}/Assignments/editor`)}
         >
           + Assignment
         </Button>
@@ -41,7 +53,7 @@ export default function Assignments() {
           <ListGroupItem key={a._id} className="d-flex justify-content-between align-items-center">
             <div
               style={{ cursor: 'pointer', flex: 1 }}
-              onClick={() => router.push(`/Courses/${cid}/Assignments/Editor?id=${a._id}`)}
+              onClick={() => router.push(`/Courses/${cid}/Assignments/editor?id=${a._id}`)}
             >
               <div className="fw-semibold">{a.title}</div>
               <div className="text-muted small">Due {a.due} | {a.points} pts</div>
@@ -61,7 +73,7 @@ export default function Assignments() {
               <Button
                 variant="warning"
                 size="sm"
-                onClick={() => router.push(`/Courses/${cid}/Assignments/Editor?id=${a._id}`)}
+                onClick={() => router.push(`/Courses/${cid}/Assignments/editor?id=${a._id}`)}
                 id="wd-edit-assignment"
               >
                 Edit

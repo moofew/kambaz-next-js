@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+import * as client from "../client";
 import Link from "next/link";
 import { redirect } from "next/dist/client/components/navigation";
 import { setCurrentUser } from "../reducer";
@@ -11,12 +12,8 @@ import { FormControl, Button } from "react-bootstrap";
 export default function Signin() {
  const [credentials, setCredentials] = useState<any>({});
  const dispatch = useDispatch();
- const signin = () => {
-   const user = db.users.find(
-     (u: any) =>
-       u.username === credentials.username &&
-       u.password === credentials.password
-   );
+ const signin = async() => {
+   const user = await client.signin(credentials);
    if (!user) return;
    dispatch(setCurrentUser(user));
    redirect("/Dashboard");
@@ -31,7 +28,7 @@ export default function Signin() {
              onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
              className="mb-2" placeholder="password" type="password" id="wd-password" />
       <Button onClick={signin} id="wd-signin-btn" className="w-100" > Sign in </Button>
-      <Link id="wd-signup-link" href="/Kambaz/Account/Signup"> Sign up </Link>
+      <Link id="wd-signup-link" href="/Account/Signup"> Sign up </Link>
     </div>
 );}
 
