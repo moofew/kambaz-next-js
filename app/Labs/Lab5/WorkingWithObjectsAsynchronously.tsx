@@ -6,20 +6,28 @@ import { FaTrash } from "react-icons/fa6";
 import { FaPlusCircle } from "react-icons/fa";
 import { FaPencil } from "react-icons/fa6";
 import { TiDelete } from "react-icons/ti";
+
+interface Todo {
+  id: number | string;
+  title: string;
+  completed: boolean;
+  editing?: boolean;
+}
+
 export default function WorkingWithArraysAsynchronously() {
-  const [todos, setTodos] = useState<any[]>([]);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const editTodo = (todo: any) => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const editTodo = (todo: Todo) => {
     const updatedTodos = todos.map(
       (t) => t.id === todo.id ? { ...todo, editing: true } : t );
     setTodos(updatedTodos);
   };
-  const updateTodo = async (todo: any) => {
+  const updateTodo = async (todo: Todo) => {
     try {
       await client.updateTodo(todo);
       setTodos(todos.map((t) => (t.id === todo.id ? todo : t)));
-    } catch (error: any) {
-      setErrorMessage(error.response.data.message);
+    } catch (error: unknown) {
+      setErrorMessage((error as { response: { data: { message: string } } }).response.data.message);
     }
   };
 
@@ -31,14 +39,14 @@ export default function WorkingWithArraysAsynchronously() {
     const newTodo = await client.postNewTodo({ title: "New Posted Todo", completed: false, });
     setTodos([...todos, newTodo]);
   };
-  const deleteTodo = async (todo: any) => {
+  const deleteTodo = async (todo: Todo) => {
     try {
       await client.deleteTodo(todo);
       const newTodos = todos.filter((t) => t.id !== todo.id);
       setTodos(newTodos);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.log(error);
-      setErrorMessage(error.response.data.message);
+      setErrorMessage((error as { response: { data: { message: string } } }).response.data.message);
     }
   };
 
@@ -46,7 +54,7 @@ export default function WorkingWithArraysAsynchronously() {
     const todos = await client.fetchTodos();
     setTodos(todos);
   };
-  const removeTodo = async (todo: any) => {
+  const removeTodo = async (todo: Todo) => {
     const updatedTodos = await client.removeTodo(todo);
     setTodos(updatedTodos);
   };
