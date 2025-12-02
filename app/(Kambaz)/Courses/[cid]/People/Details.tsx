@@ -13,7 +13,7 @@ export default function PeopleDetails({ user, onClose }: { user: User; onClose: 
     const saveUser = () => {
       console.log("saveUser called with name:", name);
       const [firstName, lastName] = name.split(" ");
-      const updatedUser = { ...user, firstName, lastName };
+      const updatedUser = { ...user, firstName, lastName } as User & { _id: string };
       console.log("updatedUser:", updatedUser);
       client.updateUser(updatedUser).catch((error) => {
         console.error("Error updating user:", error);
