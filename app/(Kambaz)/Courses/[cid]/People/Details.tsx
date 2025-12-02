@@ -6,7 +6,7 @@ import { FormControl } from "react-bootstrap";
 import * as client from "../../../Account/client";
 import { User } from "../../../Account/client";
 
-export default function PeopleDetails({ user, onClose }: { user: User; onClose: () => void; }) {
+export default function PeopleDetails({ user, onClose }: { user: User | null; onClose: () => void; }) {
     const [name, setName] = useState(`${user?.firstName || ""} ${user?.lastName || ""}`);
     const [editing, setEditing] = useState(false);
 
