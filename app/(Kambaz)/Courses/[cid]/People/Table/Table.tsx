@@ -1,14 +1,13 @@
 "use client"
 import { useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
-import * as client from "../../../../Account/client";
 import PeopleDetails from "../Details";
-import Link from "next/link";
+import { User } from "../../../../Account/client";
 // import * as db from "../../Database";
 // import { useParams } from "nextjs/navigation";
-export default function PeopleTable({ users = [], fetchUsers }: { users?: any[]; fetchUsers: () => void; }) {
+export default function PeopleTable({ users = [], fetchUsers }: { users?: User[]; fetchUsers: () => void; }) {
   const [showDetails, setShowDetails] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   return (
     <div id="wd-people-table">
@@ -34,7 +33,7 @@ export default function PeopleTable({ users = [], fetchUsers }: { users?: any[];
           </tr>
         </thead>
         <tbody>
-          {users?.map((user: any) => (
+          {users?.map((user) => (
             <tr key={user._id}>
               <td className="wd-full-name text-nowrap">
                 <span className="text-decoration-none"

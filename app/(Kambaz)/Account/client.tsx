@@ -35,7 +35,7 @@ interface Credentials {
   password: string;
 }
 
-interface User {
+export interface User {
   _id?: string;
   username?: string;
   password?: string;
@@ -44,6 +44,10 @@ interface User {
   email?: string;
   dob?: string;
   role?: string;
+  loginId?: string;
+  section?: string;
+  lastActivity?: string;
+  totalActivity?: string;
 }
 
 export const signin = async (credentials: Credentials) => {
@@ -71,7 +75,7 @@ export const updateUser = async (user: User & { _id: string }) => {
   return response.data;
 };
 
-export const createUser = async (user: any) => {
-  const response = await axios.post(`${USERS_API}`, user);
+export const createUser = async (user: Partial<User>) => {
+  const response = await axiosWithCredentials.post(`${USERS_API}`, user);
   return response.data;
 };

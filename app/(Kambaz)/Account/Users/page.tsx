@@ -5,9 +5,24 @@ import PeopleTable from "../../Courses/[cid]/People/Table/Table";
 import * as client from "../client";
 import { FormControl } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa6";
+
+interface User {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  password?: string;
+  email?: string;
+  section?: string;
+  role: string;
+  loginId?: string;
+  lastActivity?: string;
+  totalActivity?: string;
+}
+
 export default function Users() {
- const [users, setUsers] = useState<any[]>([]);
- const [allUsers, setAllUsers] = useState<any[]>([]);
+ const [users, setUsers] = useState<User[]>([]);
+ const [allUsers, setAllUsers] = useState<User[]>([]);
  const [role, setRole] = useState("");
  const [name, setName] = useState("");
  const { uid } = useParams();
@@ -25,12 +40,12 @@ export default function Users() {
 
    // Filter by role
    if (role) {
-     filtered = filtered.filter((user: any) => user.role === role);
+     filtered = filtered.filter((user) => user.role === role);
    }
 
    // Filter by name
    if (name) {
-     filtered = filtered.filter((user: any) => {
+     filtered = filtered.filter((user) => {
        const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
        return fullName.includes(name.toLowerCase());
      });
