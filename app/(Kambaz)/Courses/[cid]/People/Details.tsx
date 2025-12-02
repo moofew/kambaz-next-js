@@ -37,7 +37,7 @@ export default function PeopleDetails({ user, onClose }: { user: User; onClose: 
   return (
     <div className="wd-people-details position-fixed top-0 end-0 bottom-0 bg-white p-4 shadow w-25" style={{ zIndex: 1000 }}>
               <hr />
-      <button onClick={() => deleteUser(user._id)} className="btn btn-danger float-end wd-delete" > Delete </button>
+      <button onClick={() => deleteUser(user._id!)} className="btn btn-danger float-end wd-delete" > Delete </button>
       <button onClick={handleCancel}
               className="btn btn-secondary float-end me-2 wd-cancel" > Cancel </button>
       <button onClick={onClose} className="btn position-fixed end-0 top-0 wd-close-details">
