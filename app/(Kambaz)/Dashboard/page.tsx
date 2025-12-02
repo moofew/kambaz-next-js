@@ -39,11 +39,13 @@ export default function Dashboard() {
   };
 
   const handleEnroll = async (courseId: string) => {
+    if (!currentUser?._id) return;
     await client.enrollUserInCourse(currentUser._id, courseId);
     dispatch(enrollUser({ userId: currentUser._id, courseId }));
   };
 
   const handleUnenroll = async (courseId: string) => {
+    if (!currentUser?._id) return;
     await client.unenrollUserFromCourse(currentUser._id, courseId);
     dispatch(unenrollUser({ userId: currentUser._id, courseId }));
   };

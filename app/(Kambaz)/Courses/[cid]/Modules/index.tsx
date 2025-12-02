@@ -27,7 +27,8 @@ export default function Modules() {
   const { modules } = useSelector((state: RootState) => state.modulesReducer);
   const dispatch = useDispatch();
   const onRemoveModule = async (moduleId: string) => {
-    await client.deleteModule(moduleId);
+    if (!cid) return;
+    await client.deleteModule(cid as string, moduleId);
     dispatch(setModules(modules.filter((m) => m._id !== moduleId)));
   };
 
