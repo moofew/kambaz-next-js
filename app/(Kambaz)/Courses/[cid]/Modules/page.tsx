@@ -23,11 +23,6 @@ export default function Modules() {
   const dispatch = useDispatch();
   const [moduleName, setModuleName] = useState("");
 
-  const fetchModules = async () => {
-    const modules = await client.findModulesForCourse(cid as string);
-    dispatch(setModules(modules));
-  };
-
   const onUpdateModule = async (module: any) => {
     if (!cid) return;
     await client.updateModule(cid as string, module);
@@ -36,8 +31,20 @@ export default function Modules() {
   };
 
   useEffect(() => {
+    const fetchModules = async () => {
+      try {
+        if (!cid) return;
+        const fetchedModules = await client.findModulesForCourse(cid as string);
+        console.log("Fetched modules:", fetchedModules);
+        dispatch(setModules(fetchedModules || []));
+      } catch (error) {
+        console.error("Error fetching modules:", error);
+        dispatch(setModules([]));
+      }
+    };
+
     fetchModules();
-  }, []);
+  }, [cid, dispatch]);
 
   return (
     <div>
@@ -64,11 +71,11 @@ export default function Modules() {
         
       </div>
 
-      <ListGroup id="wd-modules" className="rounded-0">
+            <ListGroup id="wd-modules" className="rounded-0">
               <ModulesControls setModuleName={setModuleName} moduleName={moduleName} addModule={() => {dispatch(addModule({ name: moduleName, course: cid}));
               setModuleName("")
               }} />
-              {modules
+              {modules && Array.isArray(modules) && modules
                 .map((module: any) => (
                 <ListGroupItem key={module._id} className="wd-module p-0 mb-5 fs-5 border-gray">
                   <div className="wd-title p-3 ps-2 bg-secondary">
